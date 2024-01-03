@@ -2,17 +2,15 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-
-const int SCREEN_WIDTH = 1000;
-const int SCREEN_HEIGHT = 700;
-
-
+#include"utils.h"
 int main(int argc, char *argv[]) {
     int n = 5;
     int tab[n];
-
     for (int i = 0; i < n; i++) {
-        scanf("%d", &tab[i]);
+        do {
+            printf("Enter a value for tab[%d]: ", i);
+            scanf("%d", &tab[i]);
+        } while (tab[i] > 10 && tab[i]!=0);
     }
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -46,12 +44,77 @@ int main(int argc, char *argv[]) {
         SDL_Quit();
         exit(1);
     }
-}
 
-void close(TTF_Font *font, SDL_Renderer *Renderer, SDL_Window *window){
-    TTF_CloseFont(font);
-    TTF_Quit();
-    SDL_DestroyRenderer(Renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    buttons button[5];
+    button[4].button = (SDL_Rect){800, 0, 200, 50};
+      button[3].button = (SDL_Rect){0, 0, 200, 50};
+    button[0].button = (SDL_Rect){200, 0, 200, 50};
+    button[1].button = (SDL_Rect){400, 0, 200, 50};
+    button[2].button = (SDL_Rect){600, 0, 200, 50};
+    SDL_Rect rectangles[n];
+
+    int delayTime = 50;
+    bool run = true;
+
+    while (run) {
+        SDL_Event ev;
+        while (SDL_PollEvent(&ev)) {
+            switch (ev.type) {
+                case SDL_QUIT:
+                    run = false;
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                    if (ev.button.button == SDL_BUTTON_LEFT) {
+                        int mouseX, mouseY;
+                        SDL_GetMouseState(&mouseX, &mouseY);
+
+                        if (mouseX >= button[0].button.x && mouseX < button[0].button.x + button[0].button.w &&
+                            mouseY >= button[0].button.y && mouseY < button[0].button.y + button[0].button.h) {
+                            printf("Button 1 clicked!\n");
+
+                        } else if (mouseX >= button[1].button.x && mouseX < button[1].button.x + button[1].button.w &&
+                                   mouseY >= button[1].button.y && mouseY < button[1].button.y + button[1].button.h) {
+                            printf("Button 2 clicked!\n");
+                            run = false;
+                        } else if (mouseX >= button[2].button.x && mouseX < button[2].button.x + button[2].button.w &&
+                                   mouseY >= button[2].button.y && mouseY < button[2].button.y + button[2].button.h) {
+                            printf("Button 3 clicked!\n");
+
+
+                        } else if (mouseX >= button[3].button.x && mouseX < button[3].button.x + button[3].button.w &&
+                                   mouseY >= button[3].button.y && mouseY < button[3].button.y + button[3].button.h) {
+                            printf("Button 4 clicked!\n");
+
+                        } else if (mouseX >= button[4].button.x && mouseX < button[4].button.x + button[4].button.w &&
+                                   mouseY >= button[4].button.y && mouseY < button[4].button.y + button[4].button.h) {
+                            printf("Button 5 clicked!\n");
+
+                        }
+                        break;
+                    }
+            }
+        }
+
+        SDL_SetRenderDrawColor(Renderer, 220, 220, 220, 220);
+        SDL_RenderClear(Renderer);
+
+
+        SDL_Color textColor = {255, 255, 255, 255};
+        const char *buttonText = "remove";
+         drawButton(Renderer, button[3], font, buttonText, textColor);
+        buttonText = "Show";
+        drawButton(Renderer, button[0], font, buttonText, textColor);
+        buttonText = "quit";
+        drawButton(Renderer, button[1], font, buttonText, textColor);
+        buttonText = "ordre";
+        drawButton(Renderer, button[2], font, buttonText, textColor);
+        buttonText = "add";
+        drawButton(Renderer, button[4], font, buttonText, textColor);
+
+        SDL_RenderPresent(Renderer);
+    }
+
+    close(font, Renderer, window);
+
+    return 0;
 }
