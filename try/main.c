@@ -4,13 +4,18 @@
 #include <SDL2/SDL_ttf.h>
 #include"utils.h"
 int main(int argc, char *argv[]) {
-    int n = 5;
-    int tab[n];
+    int n ;
+    do {
+            printf("Enter a the number of values");
+            scanf("%d", &n);
+        } while (n > 10 );
+
+    int tab[10];
     for (int i = 0; i < n; i++) {
         do {
             printf("Enter a value for tab[%d]: ", i);
             scanf("%d", &tab[i]);
-        } while (tab[i] > 10 && tab[i]!=0);
+        } while (tab[i] > 10 || tab[i] == 0);
     }
 
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -51,7 +56,7 @@ int main(int argc, char *argv[]) {
     button[0].button = (SDL_Rect){200, 0, 200, 50};
     button[1].button = (SDL_Rect){400, 0, 200, 50};
     button[2].button = (SDL_Rect){600, 0, 200, 50};
-    SDL_Rect rectangles[n];
+    SDL_Rect rectangles[10];
 
     int delayTime = 50;
     bool run = true;
@@ -71,7 +76,11 @@ int main(int argc, char *argv[]) {
                         if (mouseX >= button[0].button.x && mouseX < button[0].button.x + button[0].button.w &&
                             mouseY >= button[0].button.y && mouseY < button[0].button.y + button[0].button.h) {
                             printf("Button 1 clicked!\n");
-
+                            int j = 300;
+                            for (int i = 0; i < n; i++) {
+                                rectangles[i] = (SDL_Rect){j, 1000 - 350 - tab[i] * 50, 50, tab[i] * 50};
+                                j = j + 70;
+                            }
                         } else if (mouseX >= button[1].button.x && mouseX < button[1].button.x + button[1].button.w &&
                                    mouseY >= button[1].button.y && mouseY < button[1].button.y + button[1].button.h) {
                             printf("Button 2 clicked!\n");
@@ -79,7 +88,13 @@ int main(int argc, char *argv[]) {
                         } else if (mouseX >= button[2].button.x && mouseX < button[2].button.x + button[2].button.w &&
                                    mouseY >= button[2].button.y && mouseY < button[2].button.y + button[2].button.h) {
                             printf("Button 3 clicked!\n");
+                            int j = 300;
+                            for (int i = 0; i < n; i++) {
+                                rectangles[i] = (SDL_Rect){j, 1000 - 350 - tab[i] * 50, 50, tab[i] * 50};
+                                j = j + 70;
+                            }
 
+                            ordreRect(Renderer, rectangles, tab, n, font);
 
                         } else if (mouseX >= button[3].button.x && mouseX < button[3].button.x + button[3].button.w &&
                                    mouseY >= button[3].button.y && mouseY < button[3].button.y + button[3].button.h) {
@@ -98,7 +113,7 @@ int main(int argc, char *argv[]) {
         SDL_SetRenderDrawColor(Renderer, 220, 220, 220, 220);
         SDL_RenderClear(Renderer);
 
-
+        drawRectangles(Renderer, rectangles, tab, n, font);
         SDL_Color textColor = {255, 255, 255, 255};
         const char *buttonText = "remove";
          drawButton(Renderer, button[3], font, buttonText, textColor);
