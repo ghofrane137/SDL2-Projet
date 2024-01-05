@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include"utils.h"
+#include"function.h"
 int main(int argc, char *argv[]) {
     int n ;
     do {
@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
             scanf("%d", &n);
         } while (n > 10 );
 
-    int tab[10];
+    int tab[n];
     for (int i = 0; i < n; i++) {
         do {
             printf("Enter a value for tab[%d]: ", i);
@@ -93,15 +93,15 @@ int main(int argc, char *argv[]) {
                                 rectangles[i] = (SDL_Rect){j, 1000 - 350 - tab[i] * 50, 50, tab[i] * 50};
                                 j = j + 70;
                             }
-
+                            ordreRect(Renderer, rectangles, tab, n, font);
                         } else if (mouseX >= button[3].button.x && mouseX < button[3].button.x + button[3].button.w &&
                                    mouseY >= button[3].button.y && mouseY < button[3].button.y + button[3].button.h) {
                             printf("Button 4 clicked!\n");
-
+                            Remove(Renderer, rectangles, tab, &n, font);
                         } else if (mouseX >= button[4].button.x && mouseX < button[4].button.x + button[4].button.w &&
                                    mouseY >= button[4].button.y && mouseY < button[4].button.y + button[4].button.h) {
                             printf("Button 5 clicked!\n");
-
+                            Add(Renderer, rectangles, tab,&n, font);
                         }
                         break;
                     }
