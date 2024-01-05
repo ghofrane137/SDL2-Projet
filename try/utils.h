@@ -173,6 +173,38 @@ void ordreRect(SDL_Renderer *Renderer, SDL_Rect rectangles[], int tab[], int n, 
 }
 
 
+
+void Remove(SDL_Renderer *Renderer, SDL_Rect rectangles[], int tab[], int *n, TTF_Font *font) {
+    int a;
+    printf("Enter the value to remove: ");
+    scanf("%d", &a);
+
+    int indexToRemove = -1;
+
+    for (int i = 0; i < *n; i++) {
+        if (tab[i] == a) {
+            indexToRemove = i;
+            break;
+        }
+    }
+
+    if (indexToRemove != -1) {
+        (*n)--;
+        for (int i = indexToRemove; i < *n; i++) {
+            tab[i] = tab[i + 1];
+            rectangles[i] = rectangles[i + 1];
+        }
+        int j = 300;
+        for (int i = 0; i < *n; i++) {
+            rectangles[i] = (SDL_Rect){j, 1000 - 350 - tab[i] * 50, 50, tab[i] * 50};
+                         j = j + 70;
+        }
+        drawRectangles(Renderer, rectangles, tab, *n, font);
+        SDL_RenderPresent(Renderer);
+    }
+}
+
+
 void close(TTF_Font *font, SDL_Renderer *Renderer, SDL_Window *window){
     TTF_CloseFont(font);
     TTF_Quit();
