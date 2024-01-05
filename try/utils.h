@@ -105,7 +105,127 @@ void drawRectangles(SDL_Renderer *Renderer, SDL_Rect rectangles[], int tab[], in
     }
 }
 
+void ordreRect(SDL_Renderer *Renderer, SDL_Rect rectangles[], int tab[], int n, TTF_Font *font) {
+    startTimer();
+    for (int i = 0; i < (n - 1); i++) {
+        SDL_Color rectColorI = {6, 127, 6, 0};
+        drawone(Renderer, &rectangles[i], tab[i], rectColorI, font);
+        SDL_RenderPresent(Renderer);
+        int minIndex = i;
+        Uint32 lastUpdateTime = SDL_GetTicks();
+        while (SDL_GetTicks() - lastUpdateTime < 300) {
+            SDL_PumpEvents();
+        }
+        startTimer();
+        for (int j = i + 1; j < n; j++) {
+            SDL_Color rectColorI = {6, 127, 6, 0};
+            drawone(Renderer, &rectangles[i], tab[i], rectColorI, font);
+            SDL_Color rectColorJ = {173, 218, 228, 0};
+            SDL_Color rectColorMin = {250, 50, 50, 0};
+            drawRectangles(Renderer, rectangles, tab, n, font);
+            drawone(Renderer, &rectangles[j], tab[j], rectColorJ, font);
+            SDL_RenderPresent(Renderer);
+            Uint32 elapsedTime = SDL_GetTicks() - lastUpdateTime;
+            if (elapsedTime < 200) {
+                SDL_Delay(200 - elapsedTime);
+            }
+            startTimer();
+            if (tab[j] < tab[minIndex]) {
+                minIndex = j;
+                drawone(Renderer, &rectangles[minIndex], tab[minIndex], rectColorMin, font);
+                SDL_RenderPresent(Renderer);
+                SDL_Delay(200);
+                startTimer();
+            }
+            lastUpdateTime = SDL_GetTicks();
+        }
 
+        if (minIndex != i) {
+            int tmp = tab[i];
+            tab[i] = tab[minIndex];
+            tab[minIndex] = tmp;
+            SDL_Rect temp = rectangles[i];
+            rectangles[i] = rectangles[minIndex];
+            rectangles[minIndex] = temp;
+            int distance = abs(rectangles[minIndex].x - rectangles[i].x);
+            int steps = distance / MOVE_SPEED;
+            int x1 = rectangles[i].x;
+            int x2 = rectangles[minIndex].x;
+            int target1 = rectangles[minIndex].x;
+            int target2 = rectangles[i].x;
+            for (int step = 0; step < steps; step++) {
+                moveRectangle(&x1, &x2, target1, target2);
+                SDL_SetRenderDrawColor(Renderer, 220, 220, 220, 220);
+                SDL_RenderClear(Renderer);
+                rectangles[i].x = x1;
+                rectangles[minIndex].x = x2;
+                drawRectangles(Renderer, rectangles, tab, n, font);
+                SDL_RenderPresent(Renderer);
+                Uint32 elapsedTime = SDL_GetTicks() - lastUpdateTime;
+                if (elapsedTime < 10) {
+                    SDL_Delay(10 - elapsedTime);
+                }
+                startTimer();
+                lastUpdateTime = SDL_GetTicks();
+            }
+        }
+    }
+}
+
+
+
+void Remove(SDL_Renderer *Renderer, SDL_Rect rectangles[], int tab[], int *n, TTF_Font *font) {
+    int a;
+    printf("Enter the value to remove: ");
+    scanf("%d", &a);
+
+    int indexToRemove = -1;
+
+    for (int i = 0; i < *n; i++) {
+        if (tab[i] == a) {
+            indexToRemove = i;
+            break;
+        }
+    }
+
+    if (indexToRemove != -1) {
+        (*n)--;
+        for (int i = indexToRemove; i < *n; i++) {
+            tab[i] = tab[i + 1];
+            rectangles[i] = rectangles[i + 1];
+        }
+        int j = 300;
+        for (int i = 0; i < *n; i++) {
+            rectangles[i] = (SDL_Rect){j, 1000 - 350 - tab[i] * 50, 50, tab[i] * 50};
+                         j = j + 70;
+        }
+        drawRectangles(Renderer, rectangles, tab, *n, font);
+        SDL_RenderPresent(Renderer);
+    }
+}
+void Add(SDL_Renderer *Renderer, SDL_Rect rectangles[], int tab[], int *n, TTF_Font *font) {
+    int newValue;
+    printf("Enter the value to add: ");
+    scanf("%d", &newValue);
+    if (*n <10 ) {
+            tab[*n] = newValue;
+            (*n)++;
+
+int startX = 300;
+for (int i = 0; i < *n; i++) {
+            tab[i] = tab[i];
+            rectangles[i] = rectangles[i];
+        }
+        int j = 300;
+        for (int i = 0; i < *n; i++) {
+            rectangles[i] = (SDL_Rect){j, 1000 - 350 - tab[i] * 50, 50, tab[i] * 50};
+                         j = j + 70;
+        }
+
+
+
+
+}}
 
 void close(TTF_Font *font, SDL_Renderer *Renderer, SDL_Window *window){
     TTF_CloseFont(font);
