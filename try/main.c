@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include"function.h"
+#include"utils.h"
 int main(int argc, char *argv[]) {
     int n ;
     do {
