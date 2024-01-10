@@ -203,7 +203,29 @@ void Remove(SDL_Renderer *Renderer, SDL_Rect rectangles[], int tab[], int *n, TT
         SDL_RenderPresent(Renderer);
     }
 }
+void Add(SDL_Renderer *Renderer, SDL_Rect rectangles[], int tab[], int *n, TTF_Font *font) {
+    int newValue;
+    printf("Enter the value to add: ");
+    scanf("%d", &newValue);
+    if (*n <10 ) {
+            tab[*n] = newValue;
+            (*n)++;
 
+int startX = 300;
+for (int i = 0; i < *n; i++) {
+            tab[i] = tab[i];
+            rectangles[i] = rectangles[i];
+        }
+        int j = 300;
+        for (int i = 0; i < *n; i++) {
+            rectangles[i] = (SDL_Rect){j, 1000 - 350 - tab[i] * 50, 50, tab[i] * 50};
+                         j = j + 70;
+        }
+
+
+
+
+}}
 
 void close(TTF_Font *font, SDL_Renderer *Renderer, SDL_Window *window){
     TTF_CloseFont(font);
