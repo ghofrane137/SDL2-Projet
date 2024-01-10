@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include"function.h"
+#include"utils.h"
 int main(int argc, char *argv[]) {
     int n ;
     do {
@@ -101,7 +101,7 @@ int main(int argc, char *argv[]) {
                         } else if (mouseX >= button[4].button.x && mouseX < button[4].button.x + button[4].button.w &&
                                    mouseY >= button[4].button.y && mouseY < button[4].button.y + button[4].button.h) {
                             printf("Button 5 clicked!\n");
-
+                            Add(Renderer, rectangles, tab,&n, font);
                         }
                         break;
                     }
